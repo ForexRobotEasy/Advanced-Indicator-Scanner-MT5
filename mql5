@@ -1,0 +1,52 @@
+
+//+------------------------------------------------------------------+
+//|                               Advanced Indicator Scanner MT5    |
+//|                                Developer: Forex Robot Easy Team  |
+//|                                Website: forexroboteasy.com       |
+//+------------------------------------------------------------------+
+
+// Include necessary libraries
+#include <Trade.mqh>
+#include <Indicator.mqh>
+
+// Define scanner parameters
+#define MAX_SYMBOLS 28
+#define MAX_TIMEFRAMES 9
+#define MAX_LINES 2
+
+//+------------------------------------------------------------------+
+//|                     Advanced Indicator Scanner MT5                |
+//|                                                                  |
+//|  This code scans and monitors chosen indicators across            |
+//|  multiple symbols and timeframes on the MetaTrader 5 platform.    |
+//|  It supports customization and access to hundreds of custom       |
+//|  indicators available on the web.                                 |
+//+------------------------------------------------------------------+
+void OnStart()
+{
+   // Define symbols and timeframes to scan
+   string symbols[MAX_SYMBOLS] = {'EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'USDCHF', 'USDCAD', 'NZDUSD', 'EURGBP', 'EURJPY', 'GBPJPY', 'AUDJPY', 'CADJPY', 'NZDJPY', 'AUDCAD', 'AUDCHF', 'AUDNZD', 'CADCHF', 'CHFJPY', 'EURAUD', 'EURCHF', 'EURCZK', 'EURDKK', 'EURHKD', 'EURNOK', 'EURPLN', 'EURSEK', 'EURTRY', 'EURZAR'};
+   ENUM_TIMEFRAMES timeframes[MAX_TIMEFRAMES] = {PERIOD_M1, PERIOD_M5, PERIOD_M15, PERIOD_M30, PERIOD_H1, PERIOD_H4, PERIOD_D1, PERIOD_W1, PERIOD_MN1};
+   
+   // Initialize scanner
+   CIndicatorScanner scanner;
+   
+   // Set scanner parameters
+   scanner.SetIndicatorParameters(symbols, MAX_SYMBOLS, timeframes, MAX_TIMEFRAMES, MAX_LINES);
+   
+   // Add custom indicators from the web
+   scanner.AddIndicator('CustomIndicator1');
+   scanner.AddIndicator('CustomIndicator2');
+   
+   // Scan and monitor indicators
+   scanner.ScanIndicators();
+   scanner.MonitorIndicators();
+   
+   // Perform trading actions based on scanner results
+   if(scanner.IsIndicatorCrossing('CustomIndicator1', 'CustomIndicator2'))
+   {
+      // Open a trade
+      CTrade trade;
+      trade.Buy();
+   }
+}
